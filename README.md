@@ -15,4 +15,4 @@
 
 ## 共同制作
 
-suzunokana × とろろぉーーーー（tr3131kami）
+[suzunokana](https://scratch.mit.edu/users/suzunokana/) × [とろろぉーーーー](https://youtube.com/@t-o-r-o-r-o-r-o-r-o)（tr3131kami）
