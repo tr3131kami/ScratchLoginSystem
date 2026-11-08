@@ -25,6 +25,9 @@
   ol.steps { margin-left:1.4em; }
   ol.steps li { margin-bottom:10px; }
   pre { background:#2b2b3a; color:#f2f2f2; border-radius:14px; padding:18px; overflow-x:auto; font-size:.85rem; line-height:1.7; margin-bottom:14px; }
+  pre { position:relative; }
+  .copy-btn { position:absolute; top:10px; right:10px; border:none; background:rgba(255,255,255,.16); color:#fff; border-radius:999px; padding:6px 14px; font-size:.75rem; cursor:pointer; }
+  .copy-btn:hover { background:rgba(255,255,255,.3); }
   code { font-family:ui-monospace,Menlo,Consolas,monospace; }
   p code, li code { background:#ffe9d2; border-radius:6px; padding:1px 7px; font-size:.88em; }
   .note { background:#fff; border:1px solid #ffd9ab; border-radius:14px; padding:16px 20px; font-size:.92rem; }
@@ -119,6 +122,23 @@
   loginBtn.addEventListener('click', function () { ScratchLogin.login(); });
   logoutBtn.addEventListener('click', function () { ScratchLogin.logout(); });
   renderDemo();
+</script>
+<script>
+  // コードブロックにコピーボタンを付ける
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'copy-btn';
+    btn.textContent = 'コピー';
+    btn.addEventListener('click', function () {
+      var text = pre.querySelector('code').innerText;
+      navigator.clipboard.writeText(text).then(function () {
+        btn.textContent = 'コピーしました';
+        setTimeout(function () { btn.textContent = 'コピー'; }, 1600);
+      });
+    });
+    pre.appendChild(btn);
+  });
 </script>
 </body>
 </html>

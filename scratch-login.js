@@ -76,7 +76,7 @@
       if (navigator.clipboard && currentCode) {
         navigator.clipboard.writeText(currentCode).then(function () {
           els.status.style.color = '#4c97ff';
-          els.status.textContent = 'コピーしました。そのまま貼り付けてコメントしてね。';
+          els.status.textContent = 'コピーしました。そのまま貼り付けてコメントしてください。';
         });
       }
     });
@@ -143,7 +143,7 @@
           setTimeout(close, 900);
         } else {
           els.status.style.color = '#d9534f';
-          els.status.textContent = 'まだコードが見つかりませんでした。コメントが反映されるまで少し時間がかかることがあります。少し待ってもう一度押してね。';
+          els.status.textContent = 'まだコードが見つかりませんでした。コメントが反映されるまで少し時間がかかることがあります。少し待ってから、もう一度押してみてください。';
         }
       })
       .catch(function () {
