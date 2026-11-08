@@ -7,32 +7,32 @@
 <meta name="description" content="ホームページにScratchアカウントでログインできる仕組みを入れるためのツール。suzunokana × tr3131kami 共同制作。">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",sans-serif; color:#2b2b2b; background:#fff8f0; line-height:1.8; }
-  header { background:linear-gradient(135deg,#ff8c1a,#ffb25e); color:#fff; text-align:center; padding:64px 20px 56px; }
-  header .badge { display:inline-block; background:rgba(255,255,255,.25); border-radius:999px; padding:4px 16px; font-size:.8rem; letter-spacing:.15em; margin-bottom:16px; }
+  body { font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",sans-serif; color:#26364d; background:#eaf2ff; line-height:1.8; }
+  header { background:linear-gradient(135deg,#4c97ff,#3373cc); color:#fff; text-align:center; padding:64px 20px 56px; border-bottom:6px solid #ff8c1a; }
+  header .badge { display:inline-block; background:#ff8c1a; color:#fff; border-radius:999px; padding:4px 16px; font-size:.8rem; letter-spacing:.15em; margin-bottom:16px; font-weight:700; }
   header h1 { font-size:clamp(1.9rem,6vw,3rem); font-weight:800; letter-spacing:.02em; }
   header p.lead { margin-top:12px; font-size:clamp(.95rem,3vw,1.1rem); opacity:.95; }
   header .credit { margin-top:22px; font-size:.9rem; background:rgba(0,0,0,.18); display:inline-block; padding:8px 20px; border-radius:999px; }
   main { max-width:860px; margin:0 auto; padding:40px 20px 70px; }
   section { margin-bottom:52px; }
-  h2 { font-size:1.35rem; margin-bottom:16px; padding-left:12px; border-left:6px solid #ff8c1a; }
+  h2 { font-size:1.35rem; margin-bottom:16px; padding-left:12px; border-left:6px solid #4c97ff; color:#1f5fc4; }
   p { margin-bottom:12px; }
-  .demo { background:#fff; border:2px solid #ffe1bd; border-radius:20px; padding:28px 24px; text-align:center; box-shadow:0 10px 30px rgba(255,140,26,.12); }
+  .demo { background:#fff; border:2px solid #bcd6ff; border-radius:20px; padding:28px 24px; text-align:center; box-shadow:0 10px 30px rgba(76,151,255,.15); }
   .demo .state { font-size:1.05rem; margin-bottom:16px; min-height:1.8em; }
   .btn { border:none; border-radius:999px; padding:13px 34px; font-size:1rem; font-weight:700; cursor:pointer; }
   .btn-login { background:#ff8c1a; color:#fff; }
-  .btn-logout { background:#eee; color:#555; }
+  .btn-logout { background:#e3ecfa; color:#3373cc; }
   ol.steps { margin-left:1.4em; }
   ol.steps li { margin-bottom:10px; }
-  pre { background:#2b2b3a; color:#f2f2f2; border-radius:14px; padding:18px; overflow-x:auto; font-size:.85rem; line-height:1.7; margin-bottom:14px; }
+  pre { background:#25324a; color:#eef3fb; border-radius:14px; padding:18px; overflow-x:auto; font-size:.85rem; line-height:1.7; margin-bottom:14px; }
   pre { position:relative; }
   .copy-btn { position:absolute; top:10px; right:10px; border:none; background:rgba(255,255,255,.16); color:#fff; border-radius:999px; padding:6px 14px; font-size:.75rem; cursor:pointer; }
   .copy-btn:hover { background:rgba(255,255,255,.3); }
   code { font-family:ui-monospace,Menlo,Consolas,monospace; }
-  p code, li code { background:#ffe9d2; border-radius:6px; padding:1px 7px; font-size:.88em; }
-  .note { background:#fff; border:1px solid #ffd9ab; border-radius:14px; padding:16px 20px; font-size:.92rem; }
-  footer { text-align:center; padding:28px 20px 40px; color:#a08b76; font-size:.85rem; }
-  a { color:#e06f00; }
+  p code, li code { background:#d7e7ff; border-radius:6px; padding:1px 7px; font-size:.88em; }
+  .note { background:#fff; border:1px solid #bcd6ff; border-radius:14px; padding:16px 20px; font-size:.92rem; }
+  footer { text-align:center; padding:28px 20px 40px; color:#7d90ad; font-size:.85rem; }
+  a { color:#3373cc; }
 </style>
 </head>
 <body>
