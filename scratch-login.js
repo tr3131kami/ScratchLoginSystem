@@ -51,7 +51,6 @@
     wrap.setAttribute('style', 'position:fixed;inset:0;background:rgba(20,16,24,.55);display:none;align-items:center;justify-content:center;z-index:9999;padding:20px;font-family:sans-serif;');
     wrap.innerHTML =
       '<div style="background:#fff;border-radius:20px;max-width:420px;width:100%;padding:28px 24px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.3);color:#2b2b2b;">' +
-        '<img src="https://tr3131kami.github.io/ScratchLoginSystem/logo.png" alt="ScratchLoginSystem" style="width:76px;height:76px;border-radius:50%;margin-bottom:10px;">' +
         '<h3 style="margin:0 0 6px;font-size:1.15rem;">Scratchでログイン</h3>' +
         '<p style="margin:0 0 14px;font-size:.85rem;color:#666;line-height:1.7;">下の認証コードを、認証用プロジェクトに<br>そのままコメントしてください。</p>' +
         '<div id="slsCode" style="font-size:1.7rem;font-weight:800;letter-spacing:.12em;background:#fff4e5;border:2px dashed #ff8c1a;border-radius:14px;padding:12px 6px;margin-bottom:10px;">----</div>' +
