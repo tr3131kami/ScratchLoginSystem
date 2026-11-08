@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScratchLoginSystem｜Scratchアカウントでログイン</title>
+<meta name="description" content="ホームページにScratchアカウントでログインできる仕組みを入れるためのツール。suzunokana × tr3131kami 共同制作。">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",sans-serif; color:#2b2b2b; background:#fff8f0; line-height:1.8; }
+  header { background:linear-gradient(135deg,#ff8c1a,#ffb25e); color:#fff; text-align:center; padding:64px 20px 56px; }
+  header .badge { display:inline-block; background:rgba(255,255,255,.25); border-radius:999px; padding:4px 16px; font-size:.8rem; letter-spacing:.15em; margin-bottom:16px; }
+  header h1 { font-size:clamp(1.9rem,6vw,3rem); font-weight:800; letter-spacing:.02em; }
+  header p.lead { margin-top:12px; font-size:clamp(.95rem,3vw,1.1rem); opacity:.95; }
+  header .credit { margin-top:22px; font-size:.9rem; background:rgba(0,0,0,.18); display:inline-block; padding:8px 20px; border-radius:999px; }
+  main { max-width:860px; margin:0 auto; padding:40px 20px 70px; }
+  section { margin-bottom:52px; }
+  h2 { font-size:1.35rem; margin-bottom:16px; padding-left:12px; border-left:6px solid #ff8c1a; }
+  p { margin-bottom:12px; }
+  .demo { background:#fff; border:2px solid #ffe1bd; border-radius:20px; padding:28px 24px; text-align:center; box-shadow:0 10px 30px rgba(255,140,26,.12); }
+  .demo .state { font-size:1.05rem; margin-bottom:16px; min-height:1.8em; }
+  .btn { border:none; border-radius:999px; padding:13px 34px; font-size:1rem; font-weight:700; cursor:pointer; }
+  .btn-login { background:#ff8c1a; color:#fff; }
+  .btn-logout { background:#eee; color:#555; }
+  ol.steps { margin-left:1.4em; }
+  ol.steps li { margin-bottom:10px; }
+  pre { background:#2b2b3a; color:#f2f2f2; border-radius:14px; padding:18px; overflow-x:auto; font-size:.85rem; line-height:1.7; margin-bottom:14px; }
+  code { font-family:ui-monospace,Menlo,Consolas,monospace; }
+  p code, li code { background:#ffe9d2; border-radius:6px; padding:1px 7px; font-size:.88em; }
+  .note { background:#fff; border:1px solid #ffd9ab; border-radius:14px; padding:16px 20px; font-size:.92rem; }
+  footer { text-align:center; padding:28px 20px 40px; color:#a08b76; font-size:.85rem; }
+  a { color:#e06f00; }
+</style>
+</head>
+<body>
+<header>
+  <div class="badge">SCRATCH LOGIN TOOL</div>
+  <h1>ScratchLoginSystem</h1>
+  <p class="lead">ホームページに「Scratchアカウントでログイン」を入れるためのツールです。</p>
+  <div class="credit">共同制作：suzunokana × tr3131kami</div>
+</header>
+
+<main>
+  <section>
+    <h2>ライブデモ</h2>
+    <p>実際にログインを試せます。ボタンを押すと認証コードが出るので、認証用プロジェクトにコメントして戻ってきてください。</p>
+    <div class="demo">
+      <div class="state" id="demoState">いまはログインしていません</div>
+      <button class="btn btn-login" id="demoLogin">Scratchでログイン</button>
+      <button class="btn btn-logout" id="demoLogout" style="display:none;">ログアウト</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>ログインの流れ</h2>
+    <ol class="steps">
+      <li>開発者がホームページに ScratchLoginSystem を搭載します。</li>
+      <li>ログインボタンを押すと、認証コードとコード送信プロジェクトへのリンクが表示されます。</li>
+      <li>利用者は、そのプロジェクトに認証コードをコメントします。</li>
+      <li>「完了」を押すと、Scratch の API でコメントを確認し、認証コードが合っているかと、コメントした人のユーザー名を取得します。</li>
+      <li>ユーザー名が分かればログイン完了です。</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>ホームページへの入れ方</h2>
+    <p>1. ライブラリを読み込みます。</p>
+    <pre><code>&lt;script src="https://tr3131kami.github.io/ScratchLoginSystem/scratch-login.js"&gt;&lt;/script&gt;</code></pre>
+    <p>2. 初期化します。ログインできたときに呼ばれる処理を書きます。</p>
+    <pre><code>&lt;script&gt;
+  ScratchLogin.init({
+    onLogin: function (user) {
+      alert(user + " としてログインしました");
+    }
+  });
+&lt;/script&gt;</code></pre>
+    <p>3. ログインボタンを置きます。</p>
+    <pre><code>&lt;button onclick="ScratchLogin.login()"&gt;Scratchでログイン&lt;/button&gt;</code></pre>
+    <p>ログイン中のユーザー名は <code>ScratchLogin.getUser()</code> で取得でき、ログアウトは <code>ScratchLogin.logout()</code> です。認証用プロジェクトは標準で ScratchLoginSystem のものが使われます。自分のプロジェクトに変えたい場合は <code>init</code> に <code>projectId</code> を渡してください。</p>
+  </section>
+
+  <section>
+    <h2>認証用プロジェクト</h2>
+    <p>認証コードのコメント先は、専用プロジェクト <a href="https://scratch.mit.edu/projects/1436331790/" target="_blank" rel="noopener">ScratchLoginSystem 認証コード受付</a> です。コードはログインのたびに変わり、コメントした本人のアカウント名だけが取得されます。パスワードを聞くことはありません。</p>
+  </section>
+
+  <section>
+    <h2>注意</h2>
+    <div class="note">
+      <p>・この仕組みは静的なホームページ向けの「表示ログイン」です。会員限定の秘密の情報を守るような強い認証ではありません。</p>
+      <p>・コメントが Scratch に反映されるまで数秒かかることがあります。その場合は「完了」をもう一度押してください。</p>
+      <p>・認証コードには有効な時間（1時間）があります。</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  ScratchLoginSystem — 共同制作：suzunokana × tr3131kami
+</footer>
+
+<script src="./scratch-login.js"></script>
+<script>
+  var stateEl = document.getElementById('demoState');
+  var loginBtn = document.getElementById('demoLogin');
+  var logoutBtn = document.getElementById('demoLogout');
+  function renderDemo() {
+    var user = ScratchLogin.getUser();
+    if (user) {
+      stateEl.textContent = '@' + user + ' としてログイン中です';
+      loginBtn.style.display = 'none';
+      logoutBtn.style.display = '';
+    } else {
+      stateEl.textContent = 'いまはログインしていません';
+      loginBtn.style.display = '';
+      logoutBtn.style.display = 'none';
+    }
+  }
+  ScratchLogin.init({ onLogin: renderDemo, onLogout: renderDemo });
+  loginBtn.addEventListener('click', function () { ScratchLogin.login(); });
+  logoutBtn.addEventListener('click', function () { ScratchLogin.logout(); });
+  renderDemo();
+</script>
+</body>
+</html>
