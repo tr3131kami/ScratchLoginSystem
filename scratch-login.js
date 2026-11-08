@@ -18,6 +18,8 @@
   var currentCode = null;
   var issuedAt = 0;
   var els = null;
+  var pollTimer = null;
+  var pollToken = 0;
 
   function getUser() {
     try { return localStorage.getItem(config.storageKey) || null; } catch (e) { return null; }
@@ -92,12 +94,18 @@
     els.status.textContent = '';
     els.wrap.style.display = 'flex';
   }
+  function stopPolling() {
+    pollToken++;
+    if (pollTimer) { clearTimeout(pollTimer); pollTimer = null; }
+    if (els) els.done.disabled = false;
+  }
   function close() {
+    stopPolling();
     if (els) els.wrap.style.display = 'none';
   }
 
   function fetchCommentsPage(page) {
-    var url = 'https://scratch.mit.edu/site-api/comments/project/' + config.projectId + '/?page=' + page;
+    var url = 'https://scratch.mit.edu/site-api/comments/project/' + config.projectId + '/?page=' + page + '&_=' + Date.now();
     return fetch(url, { cache: 'no-store' }).then(function (res) {
       if (!res.ok) throw new Error('コメントを取得できませんでした');
       return res.text();
@@ -124,33 +132,52 @@
 
   function verify() {
     if (!currentCode) return;
-    els.status.style.color = '#666';
-    els.status.textContent = '確認中です…';
+    stopPolling();
+    var token = pollToken;
+    var deadline = Date.now() + 60 * 1000;
     els.done.disabled = true;
-    fetchCommentsPage(1)
-      .then(function (html) {
-        var user = findCodeIn(html);
-        if (user) return user;
-        return fetchCommentsPage(2).then(function (html2) { return findCodeIn(html2); });
-      })
-      .then(function (user) {
-        els.done.disabled = false;
-        if (user) {
-          setUser(user);
-          els.status.style.color = '#2e9e5b';
-          els.status.textContent = 'ログイン完了！ @' + user;
-          if (typeof config.onLogin === 'function') config.onLogin(user);
-          setTimeout(close, 900);
-        } else {
-          els.status.style.color = '#d9534f';
-          els.status.textContent = 'まだコードが見つかりませんでした。コメントが反映されるまで少し時間がかかることがあります。少し待ってから、もう一度押してみてください。';
-        }
-      })
-      .catch(function () {
-        els.done.disabled = false;
-        els.status.style.color = '#d9534f';
-        els.status.textContent = '確認に失敗しました。ネットの接続を確かめて、もう一度押してね。';
-      });
+    function attempt() {
+      if (token !== pollToken) return;
+      els.status.style.color = '#666';
+      els.status.textContent = '確認中です…（自動で再チェックしています）';
+      fetchCommentsPage(1)
+        .then(function (html) {
+          if (token !== pollToken) return null;
+          var user = findCodeIn(html);
+          if (user) return user;
+          return fetchCommentsPage(2).then(function (html2) {
+            return token === pollToken ? findCodeIn(html2) : null;
+          });
+        })
+        .then(function (user) {
+          if (token !== pollToken) return;
+          if (user) {
+            stopPolling();
+            setUser(user);
+            els.status.style.color = '#2e9e5b';
+            els.status.textContent = 'ログイン完了！ @' + user;
+            if (typeof config.onLogin === 'function') config.onLogin(user);
+            setTimeout(close, 900);
+          } else if (Date.now() < deadline) {
+            pollTimer = setTimeout(attempt, 3000);
+          } else {
+            stopPolling();
+            els.status.style.color = '#d9534f';
+            els.status.textContent = 'まだコードが見つかりませんでした。コメントが反映されるまで少し時間がかかることがあります。少し待ってから、もう一度押してみてください。';
+          }
+        })
+        .catch(function () {
+          if (token !== pollToken) return;
+          if (Date.now() < deadline) {
+            pollTimer = setTimeout(attempt, 3000);
+          } else {
+            stopPolling();
+            els.status.style.color = '#d9534f';
+            els.status.textContent = '確認に失敗しました。ネットの接続を確かめて、もう一度押してみてください。';
+          }
+        });
+    }
+    attempt();
   }
 
   var api = {
